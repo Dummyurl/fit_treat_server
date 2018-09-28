@@ -19,7 +19,10 @@ module.exports = {
             if(existingUser){
                 res.status(422).send({error:"Email already in use"});
             }else{
-                User.create(req.body,(err,user)=>{
+                let user = new User(req.body);
+                let content = "Dear " + user.firstName + ", <br><br> Welcome to FitTreat.<br><br> Team FitTreat";
+                user.messages = [{subject:"Welcome",content:content}]
+                User.create(user,(err,user)=>{
                     if(err){
                         return next(err);
                     }

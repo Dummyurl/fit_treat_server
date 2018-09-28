@@ -45,12 +45,9 @@ const UserSchema = new Schema({
     targetWeight:Number,
     targetDate:Date,
     targetCalories:Number,
-    accountCreationDate:{type:Date,default:Date.now()},
+    accountCreationDate:{type:Date,default:new Date()},
     userPhoto:Buffer,
-    messages:[{
-        type:Schema.Types.ObjectId,
-        ref:'message'
-    }]
+    messages:[MessageSchema]
 });
 
 UserSchema.virtual('unreadCount').get(function(){
