@@ -5,30 +5,37 @@ const activeUserData = require('../helper').setActiveUserData;
 var app = require('../app');
 
 module.exports = {
-    
-    greetings(req,res){
+
+    greetings(req, res) {
         res.status(200).send('Hello World');
     },
     /* 
         New User Registration
     */
-    register(req,res,next){
+    register(req, res, next) {
         const email = req.body.email;
-        User.findOne({email:email},(err,existingUser)=>{
-            if(err){
+        User.findOne({
+            email: email
+        }, (err, existingUser) => {
+            if (err) {
                 return next(err);
             }
-            if(existingUser){
-                res.status(422).send({error:"Email already in use"});
-            }else{
+            if (existingUser) {
+                res.status(422).send({
+                    error: "Email already in use"
+                });
+            } else {
                 let user = new User(req.body);
                 let content = "Dear " + user.firstName + ", <br><br> Welcome to FitTreat.<br><br> Team FitTreat";
-                user.messages = [{subject:"Welcome",content:content}]
-                User.create(user,(err,user)=>{
-                    if(err){
+                user.messages = [{
+                    subject: "Welcome",
+                    content: content
+                }]
+                User.create(user, (err, user) => {
+                    if (err) {
                         return next(err);
                     }
-                    res.redirect(302,'./../api/loggedInUser/'+user.id);
+                    res.redirect(302, './../api/loggedInUser/' + user.id);
                 });
             }
         });
@@ -36,32 +43,52 @@ module.exports = {
     /* 
         Returns Active User Details
     */
-    activeUser(req,res,next){
-        User.findById(req.params.id,(err,user)=>{
-            if(err){
+    activeUser(req, res, next) {
+        User.findById(req.params.id, (err, user) => {
+            if (err) {
                 return next(err);
             }
-            res.send(activeUserData(user));
+            res.status(200).send(activeUserData(user));
         })
     },
     /* 
         Updates message read/unread status
     */
-    messageReadStatusChange(req,res,next){
-        User.findById(req.params.docId,(err,user)=>{
-            if(err){
+    messageReadStatusChange(req, res, next) {
+        User.findById(req.params.docId, (err, user) => {
+            if (err) {
                 return next(err);
             }
             let message = user.messages.id(req.params.msgId);
             message.readFlag = !(message.readFlag);
             user.save(message)
-            .then(user=>{
-                res.status(200).send(user.messages.id(req.params.msgId));
-            })
-            .catch(err=>{
+                .then(user => {
+                    res.status(200).send(user.messages.id(req.params.msgId));
+                })
+                .catch(err => {
+                    return next(err);
+                });
+        })
+    },
+
+    /* 
+        Update Goal Weight and Goal Date Service
+    */
+
+    updateGoalWeight(req, res, next) {
+        User.update({
+            _id: req.body.id
+        }, {
+            $set: {
+                targetWeight: req.body.targetWeight,
+                targetDate: req.body.targetDate,
+                targetCalories: req.body.targetCalories
+            }
+        }, (err, stat) => {
+            if (err) {
                 return next(err);
-            });
+            }
+            res.status(200).send(stat);
         })
     }
 }
-
