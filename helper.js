@@ -20,5 +20,6 @@ exports.setUserInfo = function setUserInfo(request){
 
 exports.setActiveUserData = function setActiveUserData(request){
 request.password = null;
+request.unreadCount = request.unreadCount;
     return request;
 }

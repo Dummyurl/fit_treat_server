@@ -36,9 +36,13 @@ const UserSchema = new Schema({
         enum:['User','Admin'],
         default:'User'
     },
+    dateOfBirth:{
+        type:String, // 'YYYY/MM/DD type string
+        required:true
+    },
     age: {
         type: Number,
-        required: true
+        required: false
     },
     // Store weight in kgs
     weight: {
@@ -67,12 +71,12 @@ UserSchema.virtual('unreadCount').get(function(){
     var msgObject = this.messages;
     var count = 0;
     for(let i = 0; i<msgObject.length;i++){
-        if(msgObject[i].unreadFlag){
+        if(msgObject[i].readFlag){
             ++count;
         }
     }
-    console.log("total count :" + msgObject.length);
-    console.log("unreadCount :" + count);
+
+    return {totalCount:msgObject.length,unreadCount:count};
 });
 
 
@@ -95,9 +99,20 @@ UserSchema.pre('save', function (next) {
       bcrypt.hash(user.password, salt, null, (err, hash) => {
         if (err) return next(err);
         user.password = hash;
-        next();
+        //next();
       });
     });
+
+    let dateString = user.dateOfBirth;
+    let today = new Date();
+    let birthDate = new Date(dateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    let m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    user.age = age;
+    next();
   });
 
 // Method to compare password for login

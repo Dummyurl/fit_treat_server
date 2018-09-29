@@ -90,5 +90,43 @@ module.exports = {
             }
             res.status(200).send(stat);
         })
+    },
+
+    /* 
+        Reload messages
+    */
+
+    reloadMessages(req,res,next){
+        User.findById(req.params.id,(err,user)=>{
+            if(err){
+                return next(err);
+            }
+            
+            res.status(200).send({msgSummary:user.unreadCount,messages:user.messages});
+        });
+    },
+
+    /* 
+        Update User Profile
+    */
+
+    updateProfile(req,res,next){
+        User.findByIdAndUpdate({
+            _id: req.body.id
+        }, {
+            $set: {
+                weight: req.body.weight,
+                height: req.body.height,
+                medicalCondition: req.body.medicalCondition,
+                firstName:req.body.firstName,
+                lastName:req.body.lastName
+            }
+        },{new:true}, (err, stat) => {
+            if (err) {
+                return next(err);
+            }
+            res.status(200).send(stat);
+        });
+
     }
 }

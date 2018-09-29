@@ -29,9 +29,16 @@ module.exports = (app) => {
     // API Routes
     //===========================
     app.use('/api',apiRoutes);
+        /* Pull Active User Details - Used For Redirection after user authentication */
     apiRoutes.get('/loggedInUser/:id',UserController.activeUser);
+        /* Change status of message to read/unread */
     apiRoutes.get('/readMessage/:docId/:msgId',UserController.messageReadStatusChange);
+        /* Updates target weight, goal date, target calories */
     apiRoutes.put('/targetWeight',UserController.updateGoalWeight);
+        /* Reloads messages */
+    apiRoutes.get('/reloadMessages/:id',UserController.reloadMessages);
+        /* Update User Profile */
+    apiRoutes.put('/updateProfile',UserController.updateProfile);
     //===========================
     // ADMIN Routes
     //===========================
