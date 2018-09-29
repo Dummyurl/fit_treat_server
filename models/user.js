@@ -1,7 +1,17 @@
 const mongoose = require('mongoose');
-const MessageSchema = require('./messages');
+//const MessageSchema = require('./messages');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
+
+const MessageSchema = new Schema({
+    subject:String,
+    createDate:{type:Date,default:Date.now},
+    readFlag:{
+        type:Boolean,
+        default:false
+    },
+    content:String
+});
 
 const UserSchema = new Schema({
     firstName: {

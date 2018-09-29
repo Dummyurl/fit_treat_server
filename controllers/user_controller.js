@@ -9,7 +9,9 @@ module.exports = {
     greetings(req,res){
         res.status(200).send('Hello World');
     },
-
+    /* 
+        New User Registration
+    */
     register(req,res,next){
         const email = req.body.email;
         User.findOne({email:email},(err,existingUser)=>{
@@ -27,19 +29,38 @@ module.exports = {
                         return next(err);
                     }
                     res.redirect(302,'./../api/loggedInUser/'+user.id);
-                  //  res.redirect(302,'/success');
                 });
             }
         });
     },
-
+    /* 
+        Returns Active User Details
+    */
     activeUser(req,res,next){
-        console.log("User ID : " + req.params.id);
         User.findById(req.params.id,(err,user)=>{
             if(err){
                 return next(err);
             }
             res.send(activeUserData(user));
+        })
+    },
+    /* 
+        Updates message read/unread status
+    */
+    messageReadStatusChange(req,res,next){
+        User.findById(req.params.docId,(err,user)=>{
+            if(err){
+                return next(err);
+            }
+            let message = user.messages.id(req.params.msgId);
+            message.readFlag = !(message.readFlag);
+            user.save(message)
+            .then(user=>{
+                res.status(200).send(user.messages.id(req.params.msgId));
+            })
+            .catch(err=>{
+                return next(err);
+            });
         })
     }
 }

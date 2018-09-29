@@ -23,5 +23,11 @@ const MealSchema = new Schema({
     nutritionInfo:String,
     ingredients:String,
     directions:String,
-    photo:ImageSchema
+    photo:Schema.type.ImageSchema,
+    timezone:{
+        type:String,
+        default:"UTC"
+    } //user's timezone
 });
+
+co

@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const UserController = require('../controllers/user_controller');
+const MessageController = require('../controllers/message_controller');
 const passportService = require('../config/passport');
 const helper = require('../helper').setUserInfo;
 
@@ -30,7 +31,8 @@ module.exports = (app) => {
     //===========================
     app.use('/api',apiRoutes);
     apiRoutes.get('/loggedInUser/:id',UserController.activeUser);
-
+    apiRoutes.get('/readMessage/:docId/:msgId',UserController.messageReadStatusChange);
+    apiRoutes.put('/targetWeight/:id')
     //===========================
     // ADMIN Routes
     //===========================
