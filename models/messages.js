@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const MessageSchema = new Schema({
     subject:String,
     createDate:{type:Date,default:Date.now},
-    unreadFlag:{
+    readFlag:{
         type:Boolean,
         default:false
     },

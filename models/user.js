@@ -40,13 +40,16 @@ const UserSchema = new Schema({
         type: Number,
         required: true
     },
+    timeZone:String,
     bmi:Number,
     medicalCondition:String,
     targetWeight:Number,
     targetDate:Date,
     targetCalories:Number,
     accountCreationDate:{type:Date,default:new Date()},
-    userPhoto:Buffer,
+    userPhoto:{
+        type:String
+    },
     messages:[MessageSchema]
 });
 
