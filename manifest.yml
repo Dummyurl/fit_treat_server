@@ -1,0 +1,5 @@
+---
+applications:
+- name: fitTreat
+  memory: 128M
+  instances: 1
