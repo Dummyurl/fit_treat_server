@@ -39,6 +39,8 @@ module.exports = (app) => {
     apiRoutes.get('/reloadMessages/:id',UserController.reloadMessages);
         /* Update User Profile */
     apiRoutes.put('/updateProfile',UserController.updateProfile);
+        /*  User Photo Upload/Update Service */
+    apiRoutes.post('/photoUpdate',UserController.userPhotoUpdate);
     //===========================
     // ADMIN Routes
     //===========================

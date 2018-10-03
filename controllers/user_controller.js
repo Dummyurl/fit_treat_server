@@ -82,13 +82,14 @@ module.exports = {
             $set: {
                 targetWeight: req.body.targetWeight,
                 targetDate: req.body.targetDate,
-                targetCalories: req.body.targetCalories
+                targetCalories: req.body.targetCalories,
+                weightUnit:req.body.weightUnit
             }
         }, (err, stat) => {
             if (err) {
                 return next(err);
             }
-            res.status(200).send(stat);
+            res.status(200).send({status:"success"});
         })
     },
 
@@ -116,17 +117,39 @@ module.exports = {
         }, {
             $set: {
                 weight: req.body.weight,
+                weightUnit:req.body.weightUnit,
                 height: req.body.height,
+                heightUnit:req.body.heightUnit,
+                foodPreference:req.body.foodPreference,
                 medicalCondition: req.body.medicalCondition,
                 firstName:req.body.firstName,
                 lastName:req.body.lastName
             }
-        },{new:true}, (err, stat) => {
+        },{new:true}, (err, user) => {
             if (err) {
                 return next(err);
             }
-            res.status(200).send(stat);
+            res.status(200).send(activeUserData(user));
         });
 
-    }
+    },
+
+    /* 
+        User Photo Upload/Update Service
+    */
+
+   userPhotoUpdate(req,res,next){
+        User.findByIdAndUpdate({
+            _id:req.body.id
+        },{
+            $set:{
+                userPhoto:req.body.userPhoto
+            }
+        },{new:true},(err,user)=>{
+            if(err){
+                return next(err);
+            }
+            res.status(200).send({id:user._id,photoString:user.userPhoto});
+        })
+   }
 }

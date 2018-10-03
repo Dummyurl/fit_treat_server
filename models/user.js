@@ -25,6 +25,11 @@ const UserSchema = new Schema({
         lowercase:true,
         required: true
     },
+    gender:{
+        type:String,
+        required:true,
+        enum:['Male','Female','Other']
+    },
     password:{
         type:String,
         required:true
@@ -49,16 +54,32 @@ const UserSchema = new Schema({
         type: Number,
         required: true
     },
+    weightUnit:{
+        type:String,
+        required:true,
+        enum:['kg','lb']
+    },
     // Store height in cms
     height: {
         type: Number,
         required: true
     },
+    heightUnit:{
+        type:String,
+        required:true,
+        enum:['cm','m','ft'],
+        default:'cm'
+    },
+    foodPreference:{
+        type:String,
+        enum:['Vegan','Vegetarian','Non-Vegetarian'],
+        default:"Vegetarian"
+    },
     timeZone:String,
     bmi:Number,
     medicalCondition:String,
     targetWeight:Number,
-    targetDate:Date,
+    targetDate:String, // YYYY/MM/DD string
     targetCalories:Number,
     accountCreationDate:{type:Date,default:new Date()},
     userPhoto:{
@@ -71,7 +92,7 @@ UserSchema.virtual('unreadCount').get(function(){
     var msgObject = this.messages;
     var count = 0;
     for(let i = 0; i<msgObject.length;i++){
-        if(msgObject[i].readFlag){
+        if(!msgObject[i].readFlag){
             ++count;
         }
     }
