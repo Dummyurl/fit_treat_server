@@ -85,7 +85,8 @@ const UserSchema = new Schema({
     userPhoto:{
         type:String
     },
-    messages:[MessageSchema]
+    messages:[MessageSchema],
+    mealAssigned:[{type:Schema.Types.ObjectId,ref:'meal'}]
 });
 
 UserSchema.virtual('unreadCount').get(function(){

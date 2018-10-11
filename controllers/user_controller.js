@@ -2,8 +2,6 @@ const User = require('../models/user');
 const setUserInfo = require('../helper').setUserInfo;
 const activeUserData = require('../helper').setActiveUserData;
 
-var app = require('../app');
-
 module.exports = {
 
     greetings(req, res) {

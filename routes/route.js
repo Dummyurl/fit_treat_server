@@ -3,6 +3,7 @@ const passport = require('passport');
 const UserController = require('../controllers/user_controller');
 const passportService = require('../config/passport');
 const helper = require('../helper').setUserInfo;
+const MealController = require('../controllers/meal_controller');
 
 const requireLogin = passport.authenticate('local',{session:false});
 module.exports = (app) => {
@@ -45,6 +46,10 @@ module.exports = (app) => {
     // ADMIN Routes
     //===========================
     app.use('/admin', adminRoutes);
+
+        /* Add Meal Data */
+    adminRoutes.post('/addMeal',MealController.addMealData);
+    /* Clear DB */
     adminRoutes.get('/clearDB', (req, res) => {
         const mongoose = require('mongoose');
         mongoose.connection.db.dropDatabase()
