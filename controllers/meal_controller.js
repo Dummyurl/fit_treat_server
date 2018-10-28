@@ -5,7 +5,7 @@ const Meal = require('../models/meal');
    //***********************************
   
     //*********************************** 
-    // Image Folder URL - Cloud System
+    // Image Folder URL - Cloud System 0
     const rootUrl = 'https://s3.us-east-2.amazonaws.com/fittreatstorage/meal_images_dev/';
     //***********************************
 module.exports = {
