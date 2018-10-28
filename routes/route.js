@@ -2,10 +2,10 @@ const express = require('express');
 const passport = require('passport');
 const UserController = require('../controllers/user_controller');
 const passportService = require('../config/passport');
-const helper = require('../helper').setUserInfo;
 const MealController = require('../controllers/meal_controller');
 const MedicineController = require('../controllers/medicine_controller');
 const SymptomController = require('../controllers/symptoms_controller');
+const AppDataController = require('../controllers/appData_controller');
 
 const requireLogin = passport.authenticate('local',{session:false});
 module.exports = (app) => {
@@ -50,11 +50,21 @@ module.exports = (app) => {
     apiRoutes.get('/initialSymptoms',SymptomController.first10Symptoms);
         /* Search Symptom */
     apiRoutes.get('/searchSymptoms/:searchParam',SymptomController.searchSymptom);
+        /* Get App About/References Data */
+    apiRoutes.get('/getAppData',AppDataController.getAppDefaultData);
+        /* Post New Message to Admin */
+    apiRoutes.post('/sendMsgToAdmin',(req,res,next)=>{
+        let senderId = req.body.id;
+        let msg = req.body.msg;
+        res.status(200).send({msg:"Thank you for reaching out to us. Will revert asap."});
+    });
     //===========================
     // ADMIN Routes
     //===========================
     app.use('/admin', adminRoutes);
 
+        /* Edit App Data  */
+    adminRoutes.post('/editAppData',AppDataController.setAppDefaultData);    
         /* Add Meal Data */
     adminRoutes.post('/addMeal',MealController.addMealData);
         /* Add Medicine  */

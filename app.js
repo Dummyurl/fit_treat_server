@@ -4,10 +4,31 @@ const mongoose = require('mongoose');
 const config = require('./config/main');
 const bodyParser = require('body-parser');
 const routes = require('./routes/route');
+const AppData = require('./models/appData');
 
 mongoose.connect(config.database, {
     useNewUrlParser: true
 });
+
+AppData.findOne((err,data)=>{
+    if(err){
+        console.error(err);
+    }
+    if(data){
+        console.log("App Data Exists- No Action Done");
+    }else{
+        AppData.create(
+            {aboutSection:`<hr></hr><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras orci ante, posuere ac nulla a, sagittis dignissim lacus. Vestibulum in ullamcorper magna. Ut sem nisl, accumsan id quam ac, pulvinar gravida enim. Praesent mattis finibus velit, vehicula sodales odio blandit in. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.<p><hr></hr>`,
+            references:`BMI Calculation Formulae : <a href="https://www.icliniq.com/tool/weight-loss-by-goal-date-calculator">icliniq.com</a><br><hr></hr>Dietary Guidelines : <a href="https://www.choosemyplate.gov/dietary-guidelines">US Department of Agriculture</a>`
+            },(err,data)=>{
+                if(err){
+                    console.error(err);
+                }
+                console.log("About App Data Persisted");
+        })
+    }
+})
+
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use(function (req, res, next) {

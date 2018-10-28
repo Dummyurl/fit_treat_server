@@ -1,5 +1,6 @@
 exports.setUserInfo = function setUserInfo(request){
-    const getUserInfo = {
+    console.log(request);
+    let getUserInfo = {
         _id: request._id,
         firstName: request.firstName,
         lastName:request.lastName,
@@ -12,14 +13,16 @@ exports.setUserInfo = function setUserInfo(request){
         targetWeight:request.targetWeight,
         targetDate:request.targetDate,
         targetCalories:request.targetCalories,
-        userPhoto:Buffer,
+        userPhoto:request.userPhoto,
       };
     
       return getUserInfo;
 }
 
 exports.setActiveUserData = function setActiveUserData(request){
-request.password = null;
-request.unreadCount = request.unreadCount;
+    console.log(request);
+    request.password = null;
+    request.unreadCount = request.unreadCount;
+    request.mealAssigned = null;
     return request;
 }

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const ImageSchema = require('./image');
 const MealSchema = new Schema({
     name: {
         type: String,

@@ -83,7 +83,8 @@ const UserSchema = new Schema({
     targetCalories:Number,
     accountCreationDate:{type:Date,default:new Date()},
     userPhoto:{
-        type:String
+        type:String,
+        default:""
     },
     messages:[MessageSchema],
     mealAssigned:[{type:Schema.Types.ObjectId,ref:'meal'}]

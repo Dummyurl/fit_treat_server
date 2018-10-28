@@ -1,12 +1,12 @@
 const Meal = require('../models/meal');
    //***********************************
    //Image Folder URL - Local System
-   //const rootUrl = 'C:/Users/balkrishna.meena/Desktop/ConsultApp/Data Set/images/';
+   const rootUrl = 'C:/Users/balkrishna.meena/Desktop/ConsultApp/Data Set/images/';
    //***********************************
   
     //*********************************** 
     // Image Folder URL - Cloud System
-    const rootUrl = 'https://s3.us-east-2.amazonaws.com/fittreatstorage/meal_images_dev/';
+    //const rootUrl = 'https://s3.us-east-2.amazonaws.com/fittreatstorage/meal_images_dev/';
     //***********************************
 module.exports = {
 
