@@ -4,11 +4,12 @@ const ImageSchema = require('./image');
 const MealSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique:true
     },
     foodPreference: {
         type: String,
-        enum: ["Vegan", "Vegetarian", "Non Vegetarian"],
+        enum: ["Vegan", "Vegetarian", "Non-Vegetarian"],
         default: "Vegetarian"
     },
     cuisine: String,

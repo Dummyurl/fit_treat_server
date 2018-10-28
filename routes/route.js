@@ -4,6 +4,7 @@ const UserController = require('../controllers/user_controller');
 const passportService = require('../config/passport');
 const helper = require('../helper').setUserInfo;
 const MealController = require('../controllers/meal_controller');
+const MedicineController = require('../controllers/medicine_controller');
 
 const requireLogin = passport.authenticate('local',{session:false});
 module.exports = (app) => {
@@ -42,6 +43,8 @@ module.exports = (app) => {
     apiRoutes.put('/updateProfile',UserController.updateProfile);
         /*  User Photo Upload/Update Service */
     apiRoutes.post('/photoUpdate',UserController.userPhotoUpdate);
+        /* Meal Suggestions */
+    apiRoutes.get('/getMeals/:userId',UserController.getMeals);
     //===========================
     // ADMIN Routes
     //===========================
@@ -49,7 +52,11 @@ module.exports = (app) => {
 
         /* Add Meal Data */
     adminRoutes.post('/addMeal',MealController.addMealData);
-    /* Clear DB */
+        /* Add Medicine  */
+    adminRoutes.post('/addMedicines',MedicineController.addMedicines);
+        /* Query all medicines */
+    adminRoutes.get('/getAllMeds',MedicineController.getAllMedicines);
+        /* Clear DB */
     adminRoutes.get('/clearDB', (req, res) => {
         const mongoose = require('mongoose');
         mongoose.connection.db.dropDatabase()

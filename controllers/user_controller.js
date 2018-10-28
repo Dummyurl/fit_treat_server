@@ -1,8 +1,9 @@
 const User = require('../models/user');
 const setUserInfo = require('../helper').setUserInfo;
 const activeUserData = require('../helper').setActiveUserData;
+const Meal = require('../models/meal');
 
-module.exports = {
+var self = module.exports = {
 
     greetings(req, res) {
         res.status(200).send('Hello World');
@@ -149,5 +150,25 @@ module.exports = {
             }
             res.status(200).send({id:user._id,photoString:user.userPhoto});
         })
+   },
+
+   getMeals(req,res,next){
+        User.findById(req.params.userId,(err,user)=>{
+            if(err){
+                return next(err);
+            }
+             Meal.find((err,meals)=>{
+                if(err){
+                    return next(err);
+                }
+                user.mealAssigned = meals;
+                user.save((err,user)=>{
+                    if(err){
+                        return next(err);
+                    }
+                    res.status(200).send(user.mealAssigned);
+                })
+            }) 
+        });
    }
 }
