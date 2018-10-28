@@ -5,6 +5,7 @@ const passportService = require('../config/passport');
 const helper = require('../helper').setUserInfo;
 const MealController = require('../controllers/meal_controller');
 const MedicineController = require('../controllers/medicine_controller');
+const SymptomController = require('../controllers/symptoms_controller');
 
 const requireLogin = passport.authenticate('local',{session:false});
 module.exports = (app) => {
@@ -45,6 +46,10 @@ module.exports = (app) => {
     apiRoutes.post('/photoUpdate',UserController.userPhotoUpdate);
         /* Meal Suggestions */
     apiRoutes.get('/getMeals/:userId',UserController.getMeals);
+        /* Initial Symptoms */
+    apiRoutes.get('/initialSymptoms',SymptomController.first10Symptoms);
+        /* Search Symptom */
+    apiRoutes.get('/searchSymptoms/:searchParam',SymptomController.searchSymptom);
     //===========================
     // ADMIN Routes
     //===========================
@@ -56,6 +61,8 @@ module.exports = (app) => {
     adminRoutes.post('/addMedicines',MedicineController.addMedicines);
         /* Query all medicines */
     adminRoutes.get('/getAllMeds',MedicineController.getAllMedicines);
+        /* Add Symptoms */
+    adminRoutes.post('/addSymptoms',SymptomController.addMedicineData);
         /* Clear DB */
     adminRoutes.get('/clearDB', (req, res) => {
         const mongoose = require('mongoose');
