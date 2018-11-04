@@ -46,6 +46,11 @@ module.exports = (app) => {
     apiRoutes.post('/photoUpdate',UserController.userPhotoUpdate);
         /* Meal Suggestions */
     apiRoutes.get('/getMeals/:userId',MealController.getMeals);
+        /* Meals Filters 
+            type: Snacks, Juice
+            foodPref: Vegan, Vegetarian, Non-Vegetarian
+        */
+    apiRoutes.get('/filterMeals/:type/:foodPref',MealController.filterMeals); 
         /* Initial Symptoms */
     apiRoutes.get('/initialSymptoms',SymptomController.first10Symptoms);
         /* Search Symptom */

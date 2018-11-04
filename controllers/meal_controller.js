@@ -1,13 +1,8 @@
 const Meal = require('../models/meal');
 const User = require('../models/user');
 //***********************************
-//Image Folder URL - Local System
-const rootUrl = 'C:/Users/balkrishna.meena/Desktop/ConsultApp/Data Set/images/';
-//***********************************
-
-//*********************************** 
-// Image Folder URL - Cloud System
-//const rootUrl = 'https://s3.us-east-2.amazonaws.com/fittreatstorage/meal_images_dev/';
+// Image Folder URL
+const rootUrl = require('../config/main').s3URL;
 //***********************************
 module.exports = {
 
@@ -88,5 +83,42 @@ module.exports = {
                 return next(err);
             });
         });
+    },
+
+    filterMeals(req,res,next){
+        type = req.params.type;
+        foodPref = req.params.foodPreference;
+        // type : Snacks, Liquids
+        srchArr = [];
+        if(type=== "Snacks"){
+            srchArr.push("Snacks")
+        }else{
+            srchArr.push("Soup");
+            srchArr.push("Juice");
+        }
+        vegLimit = 10;
+        nonVegLimit = 0;
+        if(foodPref === "Vegan"){
+            foodPref = ["Vegan"];
+        }else if(foodPref === "Vegetarian"){
+            foodPref = ["Vegan","Vegetarian"];
+        }else{
+            foodPref = ["Vegan","Vegetarian"];
+            vegLimit = 5;
+            nonVegLimit = 5;
+        }
+        queryArr = [];
+        vegQuery = Meal.find({foodPreference:{$in:foodPref},course:{$in:srchArr}}).limit(vegLimit);
+        queryArr.push(vegQuery);
+        if(foodPref === "Non-Vegetarian"){
+            nonVegQuery = Meal.find({foodPreference:{$in:["Non-Vegetarian"]},course:{$in:srchArr}}).limit(nonVegLimit);
+            queryArr.push(nonVegQuery);
+        }
+
+        Promise.all(queryArr).then(data=>{
+            res.status(200).send(data);
+        }).catch(err=>{
+            return next(err);
+        })
     }
 }

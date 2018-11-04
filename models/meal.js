@@ -17,12 +17,15 @@ const MealSchema = new Schema({
         enum: ["Solid", "Liquid"],
         default: "Solid"
     }, */
-    dietType: [String], //High Protein, High Calorie, Low Fat etc Diet Types
+    dietType: {
+        type:[String],
+        default:"No Data Available"
+    }, //High Protein, High Calorie, Low Fat etc Diet Types
     idealMedCond: [String], // suitable medical conditions
     avoidableMedCond: [String], // medical conditions in which meal is to be avoided
     course: {
         type: ["String"],
-        enum: ["Breakfast", "Lunch", "Dinner", "Snack","Soup"],
+        enum: ["Breakfast", "Lunch", "Dinner", "Snack","Soup","Juice"],
         default: "Snack"
     },
     calories: Number,
