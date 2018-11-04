@@ -4,13 +4,19 @@ const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
 
 const MessageSchema = new Schema({
-    subject:String,
+    subject:{
+        type:String,
+        default:""
+    },
     createDate:{type:Date,default:Date.now},
     readFlag:{
         type:Boolean,
         default:false
     },
-    content:String
+    content:{
+        type:String,
+        default:""
+    }
 });
 
 const UserSchema = new Schema({
@@ -18,7 +24,10 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    lastName:String,
+    lastName:{
+        type:String,
+        default:""
+    },
     email: {
         type: String,
         unique:true,
@@ -28,7 +37,8 @@ const UserSchema = new Schema({
     gender:{
         type:String,
         required:true,
-        enum:['Male','Female','Other']
+        enum:['Male','Female','Other'],
+        default:"Male"
     },
     password:{
         type:String,
@@ -47,7 +57,8 @@ const UserSchema = new Schema({
     },
     age: {
         type: Number,
-        required: false
+        required: false,
+        default:0
     },
     // Store weight in kgs
     weight: {
@@ -64,7 +75,8 @@ const UserSchema = new Schema({
     // Store height in cms
     height: {
         type: Number,
-        required: true
+        required: true,
+        default:0
     },
     heightUnit:{
         type:String,
@@ -77,8 +89,14 @@ const UserSchema = new Schema({
         enum:['Vegan','Vegetarian','Non-Vegetarian'],
         default:"Vegetarian"
     },
-    timeZone:String,
-    bmi:Number,
+    timeZone:{
+        type:String,
+        default:"UTC"
+    },
+    bmi:{
+        type:Number,
+        default:0
+    },
     medicalCondition:String,
     targetWeight:{
         type:Number,
