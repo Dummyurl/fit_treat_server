@@ -20,7 +20,6 @@ exports.setUserInfo = function setUserInfo(request){
 }
 
 exports.setActiveUserData = function setActiveUserData(request){
-    console.log(request);
     request.password = null;
     request.unreadCount = request.unreadCount;
     request.mealAssigned = null;

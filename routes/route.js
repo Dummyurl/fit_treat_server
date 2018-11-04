@@ -45,7 +45,7 @@ module.exports = (app) => {
         /*  User Photo Upload/Update Service */
     apiRoutes.post('/photoUpdate',UserController.userPhotoUpdate);
         /* Meal Suggestions */
-    apiRoutes.get('/getMeals/:userId',UserController.getMeals);
+    apiRoutes.get('/getMeals/:userId',MealController.getMeals);
         /* Initial Symptoms */
     apiRoutes.get('/initialSymptoms',SymptomController.first10Symptoms);
         /* Search Symptom */

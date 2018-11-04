@@ -52,12 +52,14 @@ const UserSchema = new Schema({
     // Store weight in kgs
     weight: {
         type: Number,
-        required: true
+        required: true,
+        default:0
     },
     weightUnit:{
         type:String,
         required:true,
-        enum:['kg','lb']
+        enum:['kg','lb'],
+        default:'kg'
     },
     // Store height in cms
     height: {
@@ -78,9 +80,18 @@ const UserSchema = new Schema({
     timeZone:String,
     bmi:Number,
     medicalCondition:String,
-    targetWeight:Number,
-    targetDate:String, // YYYY/MM/DD string
-    targetCalories:Number,
+    targetWeight:{
+        type:Number,
+        default:0
+    },
+    targetDate:{
+        type:String,
+        default:""
+    }, // YYYY/MM/DD string
+    targetCalories:{
+        type:Number,
+        default:0
+    },
     accountCreationDate:{type:Date,default:new Date()},
     userPhoto:{
         type:String,
