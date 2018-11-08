@@ -8,6 +8,25 @@ module.exports = {
 
     /* Add Meal Data */
 
+    addNewMeal(req,res,next){
+        Meal.findOne({
+            name:req.body.name
+        },(existingMeal,err)=>{
+            if(existingMeal){
+                res.send(202).send({status:"Meal data already exists !"})
+            }else{
+                existingMeal.photoURL = rootUrl + existingMeal.photoURL;
+                Meal.create(existingMeal,(meal,err)=>{
+                    if (err){
+                        return next(err);
+                    }else{
+                        res.status(200).send({status:"Meal added successfully"});
+                    }
+                })
+            }
+        })
+    },
+
     addMealData(req, res, next) {
         let mealArray = req.body;
         for (let i = 0; i < mealArray.length; i++) {
@@ -119,6 +138,18 @@ module.exports = {
             res.status(200).send(data);
         }).catch(err=>{
             return next(err);
-        })
-    }
+        });
+    },
+
+    /* 
+        Admin Services
+    */
+
+   get50FirstMeals(req,res,next){
+       Meal.find().limit(50).then(data=>{
+           res.status(200).send(data);
+       }).catch(err=>{
+           return next(err);
+       })
+   }
 }

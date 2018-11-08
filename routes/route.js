@@ -70,8 +70,12 @@ module.exports = (app) => {
 
         /* Edit App Data  */
     adminRoutes.post('/editAppData',AppDataController.setAppDefaultData);    
-        /* Add Meal Data */
-    adminRoutes.post('/addMeal',MealController.addMealData);
+        /* Bulk Upload Meal */
+    adminRoutes.post('/addMeals',MealController.addMealData);
+        /* Add New Meal */
+    adminRoutes.post('/addNewMeal',MealController.addNewMeal);
+        /* Get First 50 Meals Data */
+    adminRoutes.get('/get50Meals',MealController.get50FirstMeals);
         /* Add Medicine  */
     adminRoutes.post('/addMedicines',MedicineController.addMedicines);
         /* Query all medicines */
@@ -91,6 +95,6 @@ module.exports = (app) => {
                     status: "error"
                 });
             })
-    })
+    });
 
 }
