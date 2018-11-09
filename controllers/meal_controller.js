@@ -147,9 +147,9 @@ module.exports = {
     */
 
    getMealsList(req,res,next){
-       let skip = req.params.skip;
-       let top = req.params.top;
-       Meal.find().skip(skip).limit(top).then(data=>{
+       let skipCount = parseInt(req.params.skip);
+       let top = parseInt(req.params.top);
+       Meal.find().skip(skipCount).limit(top).then(data=>{
            res.status(200).send(data);
        }).catch(err=>{
            return next(err);
