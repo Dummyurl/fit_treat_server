@@ -15,8 +15,9 @@ module.exports = {
             if(existingMeal){
                 res.send(202).send({status:"Meal data already exists !"})
             }else{
-                existingMeal.photoURL = rootUrl + existingMeal.photoURL;
-                Meal.create(existingMeal,(meal,err)=>{
+                mealData = req.body;
+                mealData.photoURL = rootUrl + mealData.photoURL;
+                Meal.create(mealData,(err,meal)=>{
                     if (err){
                         return next(err);
                     }else{
@@ -145,8 +146,10 @@ module.exports = {
         Admin Services
     */
 
-   get50FirstMeals(req,res,next){
-       Meal.find().limit(50).then(data=>{
+   getMealsList(req,res,next){
+       let skip = req.params.skip;
+       let top = req.params.top;
+       Meal.find().skip(skip).limit(top).then(data=>{
            res.status(200).send(data);
        }).catch(err=>{
            return next(err);
