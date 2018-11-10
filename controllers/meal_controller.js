@@ -136,7 +136,7 @@ module.exports = {
         }
 
         Promise.all(queryArr).then(data=>{
-            res.status(200).send(data);
+            res.status(200).send(data[0]);
         }).catch(err=>{
             return next(err);
         });
