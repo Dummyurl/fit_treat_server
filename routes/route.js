@@ -50,7 +50,7 @@ module.exports = (app) => {
             type: Snacks, Juice
             foodPref: Vegan, Vegetarian, Non-Vegetarian
         */
-    apiRoutes.get('/filterMeals/:type/:foodPref',MealController.filterMeals); 
+    apiRoutes.get('/filterMeals/:type/:foodPref/:userId',MealController.filterMeals); 
         /* Initial Symptoms */
     apiRoutes.get('/initialSymptoms',SymptomController.first10Symptoms);
         /* Search Symptom */

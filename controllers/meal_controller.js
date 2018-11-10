@@ -107,11 +107,23 @@ module.exports = {
 
     filterMeals(req,res,next){
         type = req.params.type;
-        foodPref = req.params.foodPreference;
+        foodPref = req.params.foodPref;
+        userId = req.params.userId;
+        // Set flag only when Breakfast,Lunch,Dinner filters are needed
+        userDataFetchFlag = false;
         // type : Snacks, Liquids
         srchArr = [];
         if(type=== "Snacks"){
-            srchArr.push("Snacks")
+            srchArr.push("Snacks");
+        }else if(type === "Breakfast"){
+            srchArr.push("Breakfast");
+            userDataFetchFlag = true;
+        }else if(type === "Lunch"){
+            srchArr.push("Lunch");
+            userDataFetchFlag = true;
+        }else if(type === "Dinner"){
+            srchArr.push("Dinner");
+            userDataFetchFlag = true;
         }else{
             srchArr.push("Soup");
             srchArr.push("Juice");
@@ -135,11 +147,28 @@ module.exports = {
             queryArr.push(nonVegQuery);
         }
 
-        Promise.all(queryArr).then(data=>{
-            res.status(200).send(data[0]);
-        }).catch(err=>{
-            return next(err);
-        });
+        if(userDataFetchFlag){
+            User.findById(userId,(err,user)=>{
+                mealAssigned = user.mealAssigned;
+                vegQuery = Meal.find({mealAssigned:{$in:mealAssigned},foodPreference:{$in:foodPref},course:{$in:srchArr}}).limit(vegLimit);
+                queryArr.push(vegQuery);
+                if(foodPref === "Non-Vegetarian"){
+                    nonVegQuery = Meal.find({mealAssigned:{$in:mealAssigned}},{foodPreference:{$in:["Non-Vegetarian"]},course:{$in:srchArr}}).limit(nonVegLimit);
+                    queryArr.push(nonVegQuery);
+                }
+                Promise.all(queryArr).then(data=>{
+                    res.status(200).send(data[0]);
+                }).catch(err=>{
+                    return next(err);
+                });
+            })
+        }else{
+            Promise.all(queryArr).then(data=>{
+                res.status(200).send(data[0]);
+            }).catch(err=>{
+                return next(err);
+            });
+        }
     },
 
     /* 
@@ -153,6 +182,6 @@ module.exports = {
            res.status(200).send(data);
        }).catch(err=>{
            return next(err);
-       })
+       }) 
    }
 }
