@@ -176,12 +176,29 @@ module.exports = {
     */
 
    getMealsList(req,res,next){
-       let skipCount = parseInt(req.params.skip);
-       let top = parseInt(req.params.top);
-       Meal.find().skip(skipCount).limit(top).then(data=>{
+      // let skipCount = parseInt(req.params.skip);
+      // let top = parseInt(req.params.top);
+/*        Meal.find().skip(skipCount).limit(top).then(data=>{
            res.status(200).send(data);
        }).catch(err=>{
            return next(err);
-       }) 
+       })  */
+       /* 
+        Removed skip and count
+       */
+      Meal.find().then(data=>{
+            res.status(200).send(data);
+        }).catch(err=>{
+            return next(err);
+        }) 
+   },
+
+   updateMeal(req,res,next){
+       Meal.find({id:parseInt(req.params.id)},(err,meal)=>{
+           if(err){
+               return next(err);
+           }
+           res.status(200).send({status:"Meal Updated Successfully"});
+       })
    }
 }

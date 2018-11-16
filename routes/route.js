@@ -74,8 +74,11 @@ module.exports = (app) => {
     adminRoutes.post('/addMeals',MealController.addMealData);
         /* Add New Meal */
     adminRoutes.post('/addNewMeal',MealController.addNewMeal);
-        /* Get First 50 Meals Data */
-    adminRoutes.get('/getMealsList/:skip/:top',MealController.getMealsList);
+        /* Update Meal  */
+    adminRoutes.put('/updateMeal/:id',MealController.updateMeal);   
+        /* Get Meals List */
+    //adminRoutes.get('/getMealsList/:skip/:top',MealController.getMealsList);
+    adminRoutes.get('/getMealsList',MealController.getMealsList);
         /* Add Medicine  */
     adminRoutes.post('/addMedicines',MedicineController.addMedicines);
         /* Query all medicines */
