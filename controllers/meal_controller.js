@@ -200,5 +200,14 @@ module.exports = {
            }
            res.status(200).send({status:"Meal Updated Successfully"});
        })
+   },
+
+   deleteMeal(req,res,next){
+       Meal.deleteOne({id:parseInt(req.params.id)},(err,res)=>{
+           if(err){
+               return next(err);
+           }
+           res.status(200).send({status:"Meal deleted successfully"});
+       })
    }
 }

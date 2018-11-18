@@ -76,6 +76,8 @@ module.exports = (app) => {
     adminRoutes.post('/addNewMeal',MealController.addNewMeal);
         /* Update Meal  */
     adminRoutes.put('/updateMeal/:id',MealController.updateMeal);   
+        /* Remove Meal */
+    adminRoutes.delete('/deleteMeal/:id',MealController.deleteMeal);
         /* Get Meals List */
     //adminRoutes.get('/getMealsList/:skip/:top',MealController.getMealsList);
     adminRoutes.get('/getMealsList',MealController.getMealsList);
