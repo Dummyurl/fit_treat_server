@@ -11,9 +11,9 @@ module.exports = {
             Symptoms.create({name:symptom},(err,symp)=>{
                 let medSearchArr = [];
                 _.forEach(value.medicines,function(medValue){
-                    medSearchArr.push(medValue.Name);
+                    medSearchArr.push(medValue.name);
                 })
-                Medicine.find({Name:{$in:medSearchArr}},(err,medicines)=>{
+                Medicine.find({name:{$in:medSearchArr}},(err,medicines)=>{
                     if(err){
                         return next(err);
                     }
@@ -29,7 +29,7 @@ module.exports = {
         res.status(200).send({status:"processing"});
     },
 
-    first10Symptoms(req,res,next){
+    first5Symptoms(req,res,next){
         Symptoms.find().populate('medicines').limit(5)
             .then(data=>{
                 res.send(data);
@@ -47,5 +47,45 @@ module.exports = {
         }).catch(err=>{
             return next(err);
         })
+    },
+
+    getAllSymptoms(req,res,next){
+        Symptoms.find()
+            .populate('medicines')
+            .then(data=>{
+                res.status(200).send(data)
+            })
+            .catch(err=>{
+                return next(err);
+            })
+    },
+
+    deleteSymptoms(req,res,next){
+        Symptoms.remove({_id:{$in:req.body}})
+            .then(result=>{
+                res.status(200).send(result);
+            })
+            .catch(err=>{
+                return next(err);
+            })
+    },
+
+    addNewSymptom(req,res,next){
+        Symptoms.find({name:req.body.name},(err,symp)=>{
+            if(err){
+                return next(err);
+            }
+            if(Object.keys(symp).length){
+                res.status(200).send({status:"Symptom already exists"});
+            }else{
+                Symptoms.create({name:req.body.name,medicines:req.body.medicines},(err,resp)=>{
+                    if(err){
+                        return next(err);
+                    }
+                    res.status(200).send(resp);
+                });
+            }
+        })
+       
     }
 }

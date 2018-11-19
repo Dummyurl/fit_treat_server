@@ -10,6 +10,8 @@ const AppDataController = require('../controllers/appData_controller');
 const requireLogin = passport.authenticate('local',{session:false});
 module.exports = (app) => {
 
+   
+
     app.use(passport.initialize());
     //app.use(passport.session());
 
@@ -52,7 +54,7 @@ module.exports = (app) => {
         */
     apiRoutes.get('/filterMeals/:type/:foodPref/:userId',MealController.filterMeals); 
         /* Initial Symptoms */
-    apiRoutes.get('/initialSymptoms',SymptomController.first10Symptoms);
+    apiRoutes.get('/initialSymptoms',SymptomController.first5Symptoms);
         /* Search Symptom */
     apiRoutes.get('/searchSymptoms/:searchParam',SymptomController.searchSymptom);
         /* Get App About/References Data */
@@ -69,7 +71,7 @@ module.exports = (app) => {
     app.use('/admin', adminRoutes);
 
         /* Edit App Data  */
-    adminRoutes.post('/editAppData',AppDataController.setAppDefaultData);    
+    adminRoutes.put('/editAppData/:id',AppDataController.setAppDefaultData);    
         /* Bulk Upload Meal */
     adminRoutes.post('/addMeals',MealController.addMealData);
         /* Add New Meal */
@@ -83,10 +85,24 @@ module.exports = (app) => {
     adminRoutes.get('/getMealsList',MealController.getMealsList);
         /* Add Medicine  */
     adminRoutes.post('/addMedicines',MedicineController.addMedicines);
+        /* Add New Medicine */
+    adminRoutes.post('/addNewMedicine',MedicineController.addNewMedicine);
         /* Query all medicines */
     adminRoutes.get('/getAllMeds',MedicineController.getAllMedicines);
+        /* Delete Medicines */
+    adminRoutes.post('/deleteMeds',MedicineController.deleteMeds);
         /* Add Symptoms */
     adminRoutes.post('/addSymptoms',SymptomController.addMedicineData);
+        /* Add new Symptom */
+    adminRoutes.post('/addNewSymptom',SymptomController.addNewSymptom);    
+        /* Get All Symptoms */
+    adminRoutes.get('/getAllSymptoms',SymptomController.getAllSymptoms);
+        /* Delete Symptoms */
+    adminRoutes.post('/deleteSymptoms',SymptomController.deleteSymptoms);
+
+    adminRoutes.get('/adminApp',(req,res)=>{
+        res.sendFile(__dirname+'/test.html');
+    })
         /* Clear DB */
     adminRoutes.get('/clearDB', (req, res) => {
         const mongoose = require('mongoose');

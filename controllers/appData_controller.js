@@ -3,7 +3,7 @@ const AppData = require('../models/appData');
 module.exports = {
 
     setAppDefaultData(req,res,next){
-        AppData.findOne((err,data)=>{
+        AppData.findOne({_id:req.params.id},(err,data)=>{
             data.aboutSection = req.body.aboutSection;
             data.references = req.body.references;
             data.save().then(data=>{

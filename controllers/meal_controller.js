@@ -203,11 +203,11 @@ module.exports = {
    },
 
    deleteMeal(req,res,next){
-       Meal.deleteOne({id:parseInt(req.params.id)},(err,res)=>{
+       Meal.remove({_id:parseInt(req.params.id)},(err,res)=>{
            if(err){
                return next(err);
            }
-           res.status(200).send({status:"Meal deleted successfully"});
+           res.status(200).send(res);
        })
    }
 }

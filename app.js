@@ -5,6 +5,7 @@ const config = require('./config/main');
 const bodyParser = require('body-parser');
 const routes = require('./routes/route');
 const AppData = require('./models/appData');
+var path = require('path');
 
 mongoose.connect(config.database, {
     useNewUrlParser: true
@@ -42,5 +43,20 @@ app.use(function (err, req, res, next) {
     console.error(err.stack)
     res.status(500).send('Something broke!')
 });
+
+const allowedExt = [
+    '.js',
+    '.ico',
+    '.css',
+    '.png',
+    '.jpg',
+    '.woff2',
+    '.woff',
+    '.ttf',
+    '.svg',
+  ];
+
+app.use(express.static(path.join(__dirname,'public')));
+
 routes(app);
 module.exports = app;
