@@ -9,6 +9,7 @@
   "author": "Balkrishna Meena",
   "license": "ISC",
   "dependencies": {
+    "node":"10.12.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
