@@ -4,13 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "ng": "ng",
-    "start": "node index.js",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
-    "postinstall": "ng build --aot -prod"
+    "start": "node index.js"
   },
   "author": "Balkrishna Meena",
   "license": "ISC",
