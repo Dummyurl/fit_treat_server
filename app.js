@@ -56,7 +56,10 @@ const allowedExt = [
     '.svg',
   ];
 
-app.use(express.static(path.join(__dirname,'public')));
+  app.use(express.static(__dirname + '/public/fitTreat-adminapp'));
 
+  app.get('/adminApp', function(req,res) {   
+    res.sendFile(path.join(__dirname+'/public/fitTreat-adminapp/index.html'));
+  });
 routes(app);
 module.exports = app;
