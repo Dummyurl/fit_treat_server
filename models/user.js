@@ -116,7 +116,11 @@ const UserSchema = new Schema({
         default:""
     },
     messages:[MessageSchema],
-    mealAssigned:[{type:Schema.Types.ObjectId,ref:'meal'}]
+    mealAssigned:[{type:Schema.Types.ObjectId,ref:'meal'}],
+    mealExpiry:{
+        type:Number,
+        default:0
+    }
 });
 
 UserSchema.virtual('unreadCount').get(function(){

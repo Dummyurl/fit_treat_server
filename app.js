@@ -5,7 +5,7 @@ const config = require('./config/main');
 const bodyParser = require('body-parser');
 const routes = require('./routes/route');
 const AppData = require('./models/appData');
-var path = require('path');
+
 
 mongoose.connect(config.database, {
     useNewUrlParser: true
@@ -30,7 +30,7 @@ AppData.findOne((err,data)=>{
     }
 })
 
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -56,10 +56,10 @@ const allowedExt = [
     '.svg',
   ];
 
-  app.use(express.static(__dirname + '/public/fitTreat-adminapp'));
+/*   app.use(express.static(__dirname + '/public/fitTreat-adminapp'));
 
   app.get('/adminApp', function(req,res) {   
     res.sendFile(path.join(__dirname+'/public/fitTreat-adminapp/index.html'));
-  });
+  }); */
 routes(app);
 module.exports = app;

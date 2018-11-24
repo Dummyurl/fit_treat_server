@@ -28,8 +28,14 @@ const MealSchema = new Schema({
         enum: ["Breakfast", "Lunch", "Dinner", "Snack","Soup","Juice"],
         default: "Snack"
     },
-    calories: Number,
-    servingSize: Number,
+    calories: {
+        type:Number,
+        default:0
+    },
+    servingSize: {
+        type:Number,
+        default:0    
+    },
     nutritionInfo: String,
     ingredients: String,
     directions: String,

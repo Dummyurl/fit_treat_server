@@ -6,6 +6,12 @@ const MealController = require('../controllers/meal_controller');
 const MedicineController = require('../controllers/medicine_controller');
 const SymptomController = require('../controllers/symptoms_controller');
 const AppDataController = require('../controllers/appData_controller');
+const Meal = require('../models/meal');
+const Medicine = require('../models/medicines');
+const Symptom = require('../models/symptoms');
+const User = require('../models/user');
+var path = require('path');
+const moment = require('moment');
 
 const requireLogin = passport.authenticate('local',{session:false});
 module.exports = (app) => {
@@ -72,7 +78,7 @@ module.exports = (app) => {
 
         /* Edit App Data  */
     adminRoutes.put('/editAppData/:id',AppDataController.setAppDefaultData);    
-        /* Bulk Upload Meal */
+        /* Add Meals in bulk */
     adminRoutes.post('/addMeals',MealController.addMealData);
         /* Add New Meal */
     adminRoutes.post('/addNewMeal',MealController.addNewMeal);
@@ -83,7 +89,7 @@ module.exports = (app) => {
         /* Get Meals List */
     //adminRoutes.get('/getMealsList/:skip/:top',MealController.getMealsList);
     adminRoutes.get('/getMealsList',MealController.getMealsList);
-        /* Add Medicine  */
+        /* Add Medicines in bulk */
     adminRoutes.post('/addMedicines',MedicineController.addMedicines);
         /* Add New Medicine */
     adminRoutes.post('/addNewMedicine',MedicineController.addNewMedicine);
@@ -91,7 +97,7 @@ module.exports = (app) => {
     adminRoutes.get('/getAllMeds',MedicineController.getAllMedicines);
         /* Delete Medicines */
     adminRoutes.post('/deleteMeds',MedicineController.deleteMeds);
-        /* Add Symptoms */
+        /* Add Symptoms in bulk*/
     adminRoutes.post('/addSymptoms',SymptomController.addMedicineData);
         /* Add new Symptom */
     adminRoutes.post('/addNewSymptom',SymptomController.addNewSymptom);    
@@ -99,10 +105,83 @@ module.exports = (app) => {
     adminRoutes.get('/getAllSymptoms',SymptomController.getAllSymptoms);
         /* Delete Symptoms */
     adminRoutes.post('/deleteSymptoms',SymptomController.deleteSymptoms);
+        /* Database Statistics */
+    adminRoutes.get('/dbStats',(req,res,next)=>{
+        let usrCount = User.estimatedDocumentCount();
+        let mealCount = Meal.estimatedDocumentCount();
+        let medCount = Medicine.estimatedDocumentCount();
+        let sympCount = Symptom.estimatedDocumentCount();
 
-    adminRoutes.get('/adminApp',(req,res)=>{
-        res.sendFile(__dirname+'/test.html');
-    })
+          Promise.all([usrCount,mealCount,medCount,sympCount]).then(result=>{
+             
+            let obj = {"users":0,"meals":0,"medicines":0,"symptoms":0};
+            let arrKeys = ["users","meals","medicines","symptoms"];    
+            for(let i = 0 ;i<arrKeys.length;i++){
+                obj[arrKeys[i]] = result[i];
+            }
+            res.send(obj);
+        }).catch(err=>{
+            return next(err);
+        }) 
+    });
+
+        /* Bulk upload templates */
+    adminRoutes.get('/templateDownload/:name',(req,res,next)=>{
+        let templateName = req.params.name;
+        let filePath = {
+            meal:'./../public/mealData.xlsx',
+            medicine:'./../public/medicineData.json',
+            symptoms:'./../public/SymptomsData.json'
+        };
+        var resolvedPath = path.resolve(__dirname + filePath[templateName]);
+            res.download(resolvedPath,(err)=>{
+                console.error(err);
+                return next(err);
+            });
+    });
+
+        /* Drop collections service */
+    adminRoutes.delete('/deleteCollection/:name',(req,res,next)=>{
+        let collName = req.params.name;
+         /*    
+            "meals":Meal,
+            "meds":Medicine,
+            "symptoms":Symptom,
+            "users":User 
+        */
+       console.log(collName);
+        if(collName === "meals"){
+            Meal.deleteMany((err,result)=>{
+                if(err){
+                    return next(err);
+                }
+                res.send(result);
+            }); 
+        }else if(collName === "meds"){
+            Medicine.deleteMany((err,result)=>{
+                if(err){
+                    return next(err);
+                }
+                res.send(result);
+            });
+        }else if(collName === "symptoms"){
+            Symptom.deleteMany((err,result)=>{
+                if(err){
+                    return next(err);
+                }
+                res.send(result);
+            }); 
+        }else if(collName === "users"){
+            User.deleteMany((err,result)=>{
+                if(err){
+                    return next(err);
+                }
+                res.send(result);
+            }); 
+        }else{
+            res.status(500).send({"msg":"Collection not specified"});
+        }
+    });
         /* Clear DB */
     adminRoutes.get('/clearDB', (req, res) => {
         const mongoose = require('mongoose');
