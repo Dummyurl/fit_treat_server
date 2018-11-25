@@ -217,14 +217,15 @@ var self = module.exports = {
                         </html>`;
            
                 let mailOptions = {
-                from:'"FitTreat appconsultme@gmail.com',
+                //from:'"FitTreat appconsultme@gmail.com',
+                from:'FitTreat app116066240@heroku.com',
                 to:userEmail,
                 subject:'FitTreat : Password Reset',
                 html:html
             }
 
             transporter = nodeMailer.createTransport({
-                host:"smtp.gmail.com",
+                host:"smtp.sendgrid.net",
                 port:465,
                 secure:false,
                 auth:{
