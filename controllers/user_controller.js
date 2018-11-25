@@ -226,7 +226,7 @@ var self = module.exports = {
             transporter = nodeMailer.createTransport({
                 host:"smtp.gmail.com",
                 port:465,
-                secure:true,
+                secure:false,
                 auth:{
                     user:config.userId,
                     pass:config.password
@@ -236,7 +236,7 @@ var self = module.exports = {
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     console.log(error);
-                    res.status(400).send({"msg": "Some error occurred"});
+                    res.status(400).send({"msg": "Some error occurred."});
                 } else {
                     res.status(200).send({"msg": "Please check your registered email"});
                 }
