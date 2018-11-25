@@ -45,6 +45,12 @@ module.exports = (app) => {
         /* Forgot / Change Password - Sends Email */
     apiRoutes.get('/changePassword/:email',UserController.changePassword);
         /* Password reset request */
+    apiRoutes.get('/passwordRst',(req,res,next)=>{
+        res.cookie('token','hello',{maxAge:30000});
+        res.cookie('token1','hello',{maxAge:30000});
+        res.cookie('resetToken','hello',{maxAge:30000});
+        res.sendFile(path.resolve(__dirname+'/../public/passwordReset/passwordReset.html'));
+    })
     apiRoutes.get('/passwordResetRedirect',(req,res,next)=>{
         token = req.query.token;
         userId = req.query.id;
@@ -60,15 +66,18 @@ module.exports = (app) => {
                     Link expiry validation
                 */
                 if(moment().isBefore(user.resetPasswordExpires)){
-                    res.send({"stat":"success"});
+                    res.cookie('token',user.resetPasswordToken,{maxAge:30000});
+                    res.sendFile(path.resolve(__dirname+'/../public/passwordReset/passwordReset.html'));
                 }else{
-                    res.send({"stat":"Link Expired"});
+                    res.sendFile(path.resolve(__dirname+'/../public/passwordReset/passwordLinkExpired.html'));
                 }
             }else{
-                res.send({"stat":"Invalid Token"});
+                res.status(500).send({"stat":"Invalid Token"});
             }
         })
     });    
+        /* Password Reset */
+    apiRoutes.post('/resetPassword',UserController.resetPassword);    
         /* Change status of message to read/unread */
     apiRoutes.get('/readMessage/:docId/:msgId',UserController.messageReadStatusChange);
         /* Updates target weight, goal date, target calories */

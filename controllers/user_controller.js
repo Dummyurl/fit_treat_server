@@ -6,6 +6,9 @@ const Cryptr = require('cryptr');
 const crypKey = require('../config/main').crptrKey;
 const nodeMailer = require('nodemailer');
 const config = require('../config/main')
+const cryptr = new Cryptr(crypKey);
+const moment = require('moment');
+const path = require('path');
 var self = module.exports = {
 
     greetings(req, res) {
@@ -157,13 +160,12 @@ var self = module.exports = {
 
    changePassword(req,res,next){
        userEmail = req.params.email;
-       const cryptr = new Cryptr(crypKey);
+    
        User.findOne({email:userEmail},(err,user)=>{
            if(err){
                return next(err);
            }
             userId = user._id;
-            cryptStr = cryptr.encrypt(userId);
             resetToken = cryptr.encrypt(userId + "r353tT0k3n");
             resetExpiryTime = new Date();
             mins = resetExpiryTime.getMinutes();
@@ -244,5 +246,29 @@ var self = module.exports = {
                 return next(err);
             })
        });
+   },
+
+   resetPassword(req,res,next){
+       let body = req.body;
+       let token = body.token;
+       let dob = body.dob;
+       let password = body.password;
+       let decryptToken = cryptr.decrypt(token);
+       let userId = decryptToken.substr(0,decryptToken.indexOf("r353tT0k3n"));
+       User.findById(userId).then(user=>{
+        if(moment().isBefore(user.resetPasswordExpires)){
+            if(user.dateOfBirth === dob){
+                user.password = password;
+                user.save().then(result=>{
+                    res.sendFile(path.resolve(__dirname+'/../public/passwordReset/passwordChangeSuccess.html'));
+                })
+            }else{
+                res.status(500).send({msg:"DOB did not match"});
+            }
+        }else{
+            res.sendFile(path.resolve(__dirname+'/../public/passwordReset/passwordLinkExpired.html'));
+        }
+       })
+       
    }
 }
