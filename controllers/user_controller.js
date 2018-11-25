@@ -227,7 +227,7 @@ var self = module.exports = {
             transporter = nodeMailer.createTransport({
                 host:"smtp.sendgrid.net",
                 port:465,
-                secure:false,
+                secure:true,
                 auth:{
                     user:config.userId,
                     pass:config.password
