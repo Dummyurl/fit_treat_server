@@ -42,6 +42,33 @@ module.exports = (app) => {
     app.use('/api',apiRoutes);
         /* Pull Active User Details - Used For Redirection after user authentication */
     apiRoutes.get('/loggedInUser/:id',UserController.activeUser);
+        /* Forgot / Change Password - Sends Email */
+    apiRoutes.get('/changePassword/:email',UserController.changePassword);
+        /* Password reset request */
+    apiRoutes.get('/passwordResetRedirect',(req,res,next)=>{
+        token = req.query.token;
+        userId = req.query.id;
+        User.findById(userId,(err,user)=>{
+            if(err){
+                return next(err);
+            }
+            /* 
+                Token Validation
+            */
+            if(user && user._id == userId && user.resetPasswordToken === token){
+                /* 
+                    Link expiry validation
+                */
+                if(moment().isBefore(user.resetPasswordExpires)){
+                    res.send({"stat":"success"});
+                }else{
+                    res.send({"stat":"Link Expired"});
+                }
+            }else{
+                res.send({"stat":"Invalid Token"});
+            }
+        })
+    });    
         /* Change status of message to read/unread */
     apiRoutes.get('/readMessage/:docId/:msgId',UserController.messageReadStatusChange);
         /* Updates target weight, goal date, target calories */

@@ -2,7 +2,10 @@ const User = require('../models/user');
 const setUserInfo = require('../helper').setUserInfo;
 const activeUserData = require('../helper').setActiveUserData;
 const Meal = require('../models/meal');
-
+const Cryptr = require('cryptr');
+const crypKey = require('../config/main').crptrKey;
+const nodeMailer = require('nodemailer');
+const config = require('../config/main')
 var self = module.exports = {
 
     greetings(req, res) {
@@ -151,4 +154,95 @@ var self = module.exports = {
             res.status(200).send({id:user._id,photoString:user.userPhoto});
         })
    },
+
+   changePassword(req,res,next){
+       userEmail = req.params.email;
+       const cryptr = new Cryptr(crypKey);
+       User.findOne({email:userEmail},(err,user)=>{
+           if(err){
+               return next(err);
+           }
+            userId = user._id;
+            cryptStr = cryptr.encrypt(userId);
+            resetToken = cryptr.encrypt(userId + "r353tT0k3n");
+            resetExpiryTime = new Date();
+            mins = resetExpiryTime.getMinutes();
+            resetExpiryTime.setMinutes(mins + 30);
+            user.resetPasswordToken = resetToken;
+            user.resetPasswordExpires = resetExpiryTime;
+            userName = user.firstName;
+            user.save().then(result=>{
+                link = "http://localhost:8888/api/passwordResetRedirect/?token="+resetToken+"&id="+userId;
+                
+                /* 
+                    Email Body
+                */
+                html = `<html>
+                        <body>
+                        <table border="0" width="100%" cellspacing="0" cellpadding="0"><!-- start hero -->
+                        <tbody>
+                        <tr>
+                        <td align="center" bgcolor="#e9ecef">
+                        <table border="0" width="600" cellspacing="0" cellpadding="0" align="center">
+                        <tbody>
+                        <tr>
+                        <td align="center" valign="top" width="600">
+                        <table style="max-width: 600px;" border="0" width="100%" cellspacing="0" cellpadding="0">
+                        <tbody>
+                        <tr>
+                        <td style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;" align="left" bgcolor="#ffffff">
+                        <h1 style="margin: 0; font-size: 32px; font-weight: bold; letter-spacing: -1px; line-height: 48px;">Reset Your Password</h1>
+                        </td></tr></tbody></table></td></tr><tr>
+                        <td align="center" bgcolor="#e9ecef">
+                        <table style="max-width: 600px;" border="0" width="100%" cellspacing="0" cellpadding="0">
+                        <tbody>
+                        <tr>
+                        <td style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;" align="left" bgcolor="#ffffff">
+                        <p style="margin: 0;">Hi `
+                        + userName + ',' 
+                        + `<p style="margin: 0;">Follow the link to reset your account password. If you didn't request a new password, you can safely delete this email.</p>
+                        </td></tr><tr>
+                        <td style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;" align="left" bgcolor="#ffffff">
+                        <p style="margin: 0;">The link is valid for 30 minutes only.</p><a href=`
+                        + link
+                        + ` target="_blank">Click Here</a>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf;" align="left" bgcolor="#ffffff">
+                        <p style="margin: 0;">Cheers,<br /> FitTreat</p>
+                        </td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></body>
+                        </html>`;
+           
+                let mailOptions = {
+                from:'"FitTreat appconsultme@gmail.com',
+                to:userEmail,
+                subject:'FitTreat : Password Reset',
+                html:html
+            }
+
+            transporter = nodeMailer.createTransport({
+                host:"smtp.gmail.com",
+                port:465,
+                secure:true,
+                auth:{
+                    user:config.userId,
+                    pass:config.password
+                }
+            });
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log(error);
+                    res.status(400).send({"msg": "Some error occurred"});
+                } else {
+                    res.status(200).send({"msg": "Please check your registered email"});
+                }
+            });
+
+            }).catch(err=>{
+                return next(err);
+            })
+       });
+   }
 }
