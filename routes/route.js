@@ -15,9 +15,6 @@ const moment = require('moment');
 
 const requireLogin = passport.authenticate('local',{session:false});
 module.exports = (app) => {
-
-   
-
     app.use(passport.initialize());
     //app.use(passport.session());
 
@@ -45,12 +42,6 @@ module.exports = (app) => {
         /* Forgot / Change Password - Sends Email */
     apiRoutes.get('/changePassword/:email',UserController.changePassword);
         /* Password reset request */
-    apiRoutes.get('/passwordRst',(req,res,next)=>{
-        res.cookie('token','hello',{maxAge:30000});
-        res.cookie('token1','hello',{maxAge:30000});
-        res.cookie('resetToken','hello',{maxAge:30000});
-        res.sendFile(path.resolve(__dirname+'/../public/passwordReset/passwordReset.html'));
-    })
     apiRoutes.get('/passwordResetRedirect',(req,res,next)=>{
         token = req.query.token;
         userId = req.query.id;
