@@ -64,6 +64,7 @@ var self = module.exports = {
             if (err) {
                 return next(err);
             }
+            console.log(user);
             let message = user.messages.id(req.params.msgId);
             message.readFlag = !(message.readFlag);
             user.save(message)

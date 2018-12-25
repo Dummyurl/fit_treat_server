@@ -103,6 +103,21 @@ module.exports = (app) => {
     //===========================
     app.use('/admin', adminRoutes);
 
+        /* Send Message to a user */
+    adminRoutes.post('/sendMsgToUser',(req,res,next)=>{
+        userId = req.body.userId;
+        newMsg = {subject:req.body.message["subject"],content:req.body.message["content"]};
+        user = User.findById(userId,(err,user)=>{
+            if(err){
+                return next(err);
+            }
+            user.messages.push(newMsg)
+            user.save().then(()=>{
+                return res.status(200).send({'stat':'Message Sent Successfully'});
+            })
+        })
+
+    });
         /* Edit App Data  */
     adminRoutes.put('/editAppData/:id',AppDataController.setAppDefaultData);    
         /* Add Meals in bulk */
