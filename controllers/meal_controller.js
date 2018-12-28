@@ -109,7 +109,7 @@ module.exports = {
                 }else if(user.foodPreference === "Vegetarian"){
                     foodPref = ["Vegan","Vegetarian"];
                 }else{
-                    foodPref = ["Vegan","Non-Vegetarian"];
+                    foodPref = ["Vegan","Vegetarian"];
                     vegLimit = 5;
                     nonVegLimit = 10;
                 }
