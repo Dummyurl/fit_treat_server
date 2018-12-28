@@ -140,7 +140,7 @@ module.exports = (app) => {
         /* Delete Medicines */
     adminRoutes.post('/deleteMeds',MedicineController.deleteMeds);
         /* Add Symptoms in bulk*/
-    adminRoutes.post('/addSymptoms',SymptomController.addMedicineData);
+    adminRoutes.post('/addSymptoms',SymptomController.bulkSymptomsUpload);
         /* Add new Symptom */
     adminRoutes.post('/addNewSymptom',SymptomController.addNewSymptom);    
         /* Get All Symptoms */

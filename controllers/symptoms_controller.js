@@ -4,7 +4,7 @@ const _ = require('lodash');
 
 module.exports = {
 
-    addMedicineData(req,res,next){
+    bulkSymptomsUpload(req,res,next){
         let medData = req.body;
         _.forEach(medData,function(value){
             let symptom = value.symptom["name"];

@@ -109,7 +109,7 @@ module.exports = {
                 }else if(user.foodPreference === "Vegetarian"){
                     foodPref = ["Vegan","Vegetarian"];
                 }else{
-                    foodPref = ["Vegan","Vegetarian"];
+                    foodPref = ["Vegan","Non-Vegetarian"];
                     vegLimit = 5;
                     nonVegLimit = 10;
                 }
@@ -283,12 +283,14 @@ module.exports = {
        })
    },
 
-   implicitEndTest(req,res,next){
+   /* Test Method */
+
+/*    implicitEndTest(req,res,next){
         Meal.find({foodPreference:{$in:req.body.foodPref},avoidableMedCond:{$nin:[req.body.avoidMed]}},(err,result)=>{
             if(err){
                 return next(err);
             }
             res.send(result);
         })
-   }
+   } */
 }
