@@ -89,9 +89,9 @@ const UserSchema = new Schema({
         enum:['Vegan','Vegetarian','Non-Vegetarian'],
         default:"Vegetarian"
     },
-    timeZone:{
+    timeZone:{ //Timezone offset
         type:String,
-        default:"UTC"
+        default:"0"
     },
     bmi:{
         type:Number,
